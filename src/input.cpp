@@ -1,3 +1,6 @@
+#include "raylib.h"
+#include "raymath.h"
+#include "player.h"
 #include "set_up.h"
 
 // mouse
@@ -46,7 +49,10 @@ void update_player_controls()
     }
 
     if (IsKeyDown(KEY_LEFT_SHIFT)) player_speed = 2.0f;
-    else player_speed = 0.5f;
+    else player_speed = 0.05f;
+
+    if (IsKeyDown(KEY_R)) player_pos.z += 0.1f;
+    if (IsKeyDown(KEY_F)) player_pos.z -= 0.1f;
 
     if (IsKeyDown(KEY_SPACE))
     {
@@ -56,6 +62,7 @@ void update_player_controls()
             player_grounded = false;
         }
     }
+    update_player_BB();
 }
 
 

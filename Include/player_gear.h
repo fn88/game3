@@ -1,5 +1,7 @@
 #pragma once
-#include "set_up.h"
+#include "raylib.h"
+#include "player.h"
+
 
 
 struct melee_weapon {

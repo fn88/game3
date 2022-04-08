@@ -1,4 +1,7 @@
-#include "set_up.h"
+#include "raylib.h"
+#include "raymath.h"
+#include "projectiles.h"
+#include <vector>
 
 
 std::vector<projectile_Obj> bullets {};

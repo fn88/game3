@@ -1,7 +1,4 @@
 #pragma once
-#include "raylib.h"
-#include "models.h"
-#include "player.h"
 
 
 void draw_everything();

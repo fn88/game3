@@ -1,4 +1,4 @@
-#include "set_up.h"
+#pragma once
 
 
 extern float mousePosX;

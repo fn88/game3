@@ -1,3 +1,7 @@
+#include "raylib.h"
+#include "raymath.h"
+#include "player.h"
+#include "player_gear.h"
 #include "set_up.h"
 
 melee_weapon stick {};
@@ -13,7 +17,6 @@ void create_stick()
 
     Texture2D stick_texture = LoadTexture("resources/textures/floor_texture.png");
     stick.model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = stick_texture;
-    //stick.model.transform = MatrixRotateY(PI/2);
 
     stick.anim = LoadModelAnimations("resources/models/stick.iqm", &stick_anims_count);
     stick.anim1_fc = 0;
@@ -22,12 +25,11 @@ void create_stick()
 
 void update_player_gear()
 {
-    stick.pos = { player_pos.x + (cos(player_phi) * cos(player_theta)), 
-                  player_pos.y + (cos(player_phi) * sin(player_theta)),
+    stick.pos = { player_pos.x + (cos(player_phi) * cos(player_theta -PI/8)), 
+                  player_pos.y + (cos(player_phi) * sin(player_theta - PI/8)),
                   player_pos.z + sin(player_phi) };
     
-    //stick.model.transform = MatrixRotateY(-player_theta);
-    stick.model.transform = MatrixRotateZ(-player_theta);
+    stick.model.transform = MatrixRotateXYZ(Vector3({0.0f, player_phi, -player_theta}));
 
     if (player_attack1) 
     {

@@ -1,3 +1,12 @@
+#include "raylib.h"
+#include "player.h"
+#include "player_gear.h"
+#include "input.h"
+#include "game_update.h"
+#include "enemies.h"
+#include "projectiles.h"
+#include "models.h"
+#include "draw.h"
 #include "set_up.h"
 
 
@@ -8,8 +17,9 @@ int main()
     create_player();
     create_stick();
     create_enemy();
-    load_models();
-    
+    load_level_models();
+    load_tree_models();
+
 
     while (!WindowShouldClose())
     {
@@ -18,8 +28,9 @@ int main()
         update_player_gear();
         update_enemy();
         update_projectiles();
-        all_collisions();
+        //all_collisions();
         draw_everything();
+        
 
         update_counters();
         

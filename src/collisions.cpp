@@ -1,63 +1,132 @@
-#include "set_up.h"
+#include "raylib.h"
+#include "raymath.h"
+#include "player.h"
+#include "models.h"
 
-
-bool boxCollideDetect(Vector3 box_A_pos, Vector3 box_A_size, Vector3 box_B_pos, Vector3 box_B_size)
-{
-   return CheckCollisionBoxes(
-                BoundingBox{Vector3{box_A_pos.x - box_A_size.x/2,
-                                    box_A_pos.y - box_A_size.y/2,
-                                    box_A_pos.z - box_A_size.z/2},
-                            Vector3{box_A_pos.x + box_A_size.x/2,
-                                    box_A_pos.y + box_A_size.y/2,
-                                    box_A_pos.z + box_A_size.z/2}},
-                BoundingBox{Vector3{box_B_pos.x - box_B_size.x/2,
-                                    box_B_pos.y - box_B_size.y/2,
-                                    box_B_pos.z - box_B_size.z/2},
-                            Vector3{box_B_pos.x + box_B_size.x/2,
-                                    box_B_pos.y + box_B_size.y/2,
-                                    box_B_pos.z + box_B_size.z/2}});
-}
+//void collisions(model_Obj models, 
 
 void player_collisions()
 {
-    if (!level_models.empty())
+    for (auto it = level_models.begin(); it < level_models.end(); it++)
     {
-        for (auto it = level_models.begin(); it < level_models.end(); it++)
+        if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
         {
-            if (boxCollideDetect(player_pos, player_size, (*it).pos, (*it).size))
+            if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
             {
-                if (boxCollideDetect(Vector3{player_prev_pos.x, player_prev_pos.y, player_pos.z}, player_size, (*it).pos, (*it).size)) // ----- z-axis 
+                if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z + 0.1f)) // test for ground nearby
                 {
-                    if ((*it).pos.z <= player_prev_pos.z) player_pos.z = ((*it).pos.z + ((*it).size.z/2 + player_size.z/2 + 0.001f)); // player-wall face to face but 0.001 away to not collide
-                    else if ((*it).pos.z > player_prev_pos.z) player_pos.z = ((*it).pos.z - ((*it).size.z/2 + player_size.z/2 + 0.001f));
+                    player_grounded = true;
+                    player_time_not_grounded = 0;
+                    player_jumped = false;
+                    break;
                 }
-                else if (boxCollideDetect(Vector3{player_pos.x, player_prev_pos.y, player_prev_pos.z}, player_size, (*it).pos, (*it).size)) // ----- check if x-axis alone causes collision
-                {
-                    if ((*it).pos.x <= player_prev_pos.x) player_pos.x = ((*it).pos.x + ((*it).size.x/2 + player_size.x/2 + 0.001f));  
-                    else if ((*it).pos.x > player_prev_pos.x) player_pos.x = ((*it).pos.x - ((*it).size.x/2 + player_size.x/2 + 0.001f));
-                }
-                else if (boxCollideDetect(Vector3{player_prev_pos.x, player_pos.y, player_prev_pos.z}, player_size, (*it).pos, (*it).size))  // ----- y-axis
-                {
-                    if ((*it).pos.y <= player_prev_pos.y) player_pos.y = ((*it).pos.y + ((*it).size.y/2 + player_size.y/2 + 0.001f));
-                    else if ((*it).pos.y > player_prev_pos.y) player_pos.y = ((*it).pos.y - ((*it).size.y/2 + player_size.y/2 + 0.001f));
-                }
-                break;
             }
-        } 
-
-        for (auto it = level_models.begin(); it < level_models.end(); it++)
-        {
-            if (boxCollideDetect(Vector3{player_pos.x, player_pos.y, player_pos.z - 0.05f}, player_size, (*it).pos, (*it).size)) 
-            {
-                player_grounded = true;
-                break;
-            }
-            else player_grounded = false;
         }
+        else player_grounded = false;
     }
-}
 
-void bullets_collisions()
+    for (auto it = level_models.begin(); it < level_models.end(); it++)
+    {
+        if (CheckCollisionBoxes(player_BB, (*it).BB))
+        {
+            player_colliding = true;
+            if (player_prev_BB.min.x > (*it).BB.max.x)  // check if player collides from +X direction
+            {
+                if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
+                {
+                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        {
+                            player_pos.x = (*it).BB.max.x + (player_size.x/2 + 0.001f);
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (player_prev_BB.max.x < (*it).BB.min.x)  // check if player collides from -X direction
+            {
+                if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
+                {
+                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        {
+                            player_pos.x = (*it).BB.min.x - (player_size.x/2 + 0.001f);
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (player_prev_BB.min.y > (*it).BB.max.y)  // check if player collides from +Y direction
+            {
+                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x <= (*it).BB.max.x))
+                {
+                    if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        {
+                            player_pos.y = (*it).BB.max.y + (player_size.y/2 + 0.001f);
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (player_prev_BB.max.y < (*it).BB.min.y)  // check if player collides from -Y direction
+            {
+                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x))
+                {
+                    if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        {
+                            player_pos.y = (*it).BB.min.y - (player_size.y/2 + 0.001f);
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (player_prev_BB.min.z > (*it).BB.max.z)  // check if player collides from +Z direction
+            {
+                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x))
+                {
+                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z))
+                        {
+                            player_pos.z = (*it).BB.max.z + (player_size.z/2 + 0.001f);
+                            player_grounded = true;
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (player_prev_BB.max.z < (*it).BB.min.z)  // check if player collides from -Z direction
+            {
+                if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z))
+                {
+                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    {
+                        if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x)) 
+                        {
+                            player_pos.z = (*it).BB.min.z - (player_size.z/2 + 0.001f);
+                            update_player_BB();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else player_colliding = false;  
+    }
+
+}
+/*void bullets_collisions()
 {
     if(!bullets.empty())
         for (auto it = bullets.begin(); it < bullets.end(); it++)
@@ -72,13 +141,13 @@ void bullets_collisions()
                 }
             }
         }
-}
+} */
 
 
 void all_collisions()
 {
     player_collisions();
-    bullets_collisions();
+    //bullets_collisions();
 }
 
 

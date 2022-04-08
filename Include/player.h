@@ -1,9 +1,14 @@
+#pragma once
+#include "raylib.h"
 #include "set_up.h"
+
 
 extern Model player_model;
 extern Vector3 player_size;
 extern Vector3 player_pos;
 extern Vector3 player_prev_pos;
+extern BoundingBox player_BB;
+extern BoundingBox player_prev_BB;
 extern float player_theta;
 extern float player_prev_theta;
 extern float player_phi;
@@ -11,6 +16,8 @@ extern float player_prev_phi;
 extern float player_speed;
 
 extern bool player_grounded;
+extern bool player_colliding;
+
 extern bool player_jumped;
 extern int player_time_not_grounded;
 
@@ -22,6 +29,7 @@ void update_player_dir();
 void update_player_controls();
 void update_player_gravity();
 void update_player();
+void update_player_BB();
 
 
 

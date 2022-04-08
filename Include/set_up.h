@@ -1,18 +1,5 @@
-#pragma once  // include all headers here and only include the set_up.h header everywhere else
-#include <vector>
-#include <cmath>
-#include "raymath.h"
+#pragma once 
 #include "raylib.h"   
-#include "player.h"
-#include "collisions.h"
-#include "enemies.h"
-#include "game_update.h"
-#include "draw.h"
-#include "projectiles.h"
-#include "models.h"
-#include "controls.h"
-#include "player_gear.h"
-
 
 
 extern int S_W;

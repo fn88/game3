@@ -1,5 +1,5 @@
 #include "trash_zombos_header.h"
-#include "audio.h"
+//#include "audio.h"
 #include "models.h"
 
 
@@ -101,7 +101,7 @@ int main(void)
     SetTargetFPS(FPS);
 
     InitAudioDevice();
-    load_Game_Sounds();
+    //load_Game_Sounds();
     
     cam = {0};
     cam.fovy = 40.0f;
@@ -226,13 +226,13 @@ int main(void)
             if (ramps[i].activated) 
             {
                 UpdateModelAnimation(rampsModels[i], anims[0], ramps[i].frame);
-                if (ramps[i].frame == 1) playSound(0);
+                //if (ramps[i].frame == 1) playSound(0);
             } 
         }
         if (IsMouseButtonPressed(1)) 
         {
             player_shoot_machine_gun();
-            playSound(1);
+            //playSound(1);
         } 
     
         updateMouse();
@@ -262,7 +262,7 @@ int main(void)
 
             for (int i = 0; i < 6; i++)
             {
-                DrawModel(level_Models[i], wallsPos[i], 1.0f, BROWN);
+                //DrawModel(level_Models[i], wallsPos[i], 1.0f, BROWN);
             }
             
             //--------projectiles----------------------

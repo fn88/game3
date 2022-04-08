@@ -1,3 +1,7 @@
+#include "raylib.h"
+#include "raymath.h"
+#include "enemies.h"
+
 #include "set_up.h"
 
 
@@ -22,7 +26,7 @@ void create_enemy()
 {
     enemy_model = LoadModel("resources/models/player.obj");
     enemy_size = {2.0f, 2.0f, 2.0f};
-    enemy_pos = {14.0f, 14.0f, 4.0f};
+    enemy_pos = {14.0f, 14.0f, enemy_size.z/2};
     enemy_prev_pos = enemy_pos;
     enemy_theta = 0.0f;
     enemy_prev_theta = 0.0f;
