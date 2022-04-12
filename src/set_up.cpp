@@ -20,6 +20,7 @@ void set_up_window()
     SetMousePosition(S_W/2.0f, S_H/2.0f);
     HideCursor();
     SetTargetFPS(FPS);
+    //InitAudioDevice();
 }
 
 void set_up_cam()
@@ -30,4 +31,6 @@ void set_up_cam()
     cam.position = {10.0f, 10.0f, 10.0f};
     cam.target = {0.0f, 0.0f, 0.0f};
 }
+
+
 

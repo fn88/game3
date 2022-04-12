@@ -1,154 +1,138 @@
+#include "collisions.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "player.h"
 #include "models.h"
 
-//void collisions(model_Obj models, 
 
 void player_collisions()
 {
-    for (auto it = level_models.begin(); it < level_models.end(); it++)
+    collisions(ptr_tree_models, ptr_player);
+    collisions(ptr_level_models, ptr_player);
+}
+
+
+void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
+{
+    for (auto it = (*models).begin(); it < (*models).end(); it++)
     {
-        if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
+        if (((*entity).BB.max.x > (*it).BB.min.x) && ((*entity).BB.min.x < (*it).BB.max.x))
         {
-            if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
+            if (((*entity).BB.max.y > (*it).BB.min.y) && ((*entity).BB.min.y < (*it).BB.max.y))
             {
-                if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z + 0.1f)) // test for ground nearby
+                if (((*entity).BB.max.z > (*it).BB.min.z) && ((*entity).BB.min.z < (*it).BB.max.z + 0.1f)) // test for ground nearby
                 {
-                    player_grounded = true;
-                    player_time_not_grounded = 0;
-                    player_jumped = false;
+                    (*entity).grounded = true;
+                    (*entity).time_not_grounded = 0;
+                    (*entity).jumped = false;
                     break;
                 }
             }
         }
-        else player_grounded = false;
+        else (*entity).grounded = false;
     }
 
-    for (auto it = level_models.begin(); it < level_models.end(); it++)
+    for (auto it = (*models).begin(); it < (*models).end(); it++)
     {
-        if (CheckCollisionBoxes(player_BB, (*it).BB))
+        if (CheckCollisionBoxes((*entity).BB, (*it).BB))
         {
-            player_colliding = true;
-            if (player_prev_BB.min.x > (*it).BB.max.x)  // check if player collides from +X direction
+            player.colliding = true;
+            if ((*entity).prev_BB.min.x > (*it).BB.max.x)  // check if player collides from +X direction
             {
-                if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
+                if (((*entity).BB.max.x > (*it).BB.min.x) && ((*entity).BB.min.x < (*it).BB.max.x))
                 {
-                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).prev_BB.max.y > (*it).BB.min.y) && ((*entity).prev_BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
-                            player_pos.x = (*it).BB.max.x + (player_size.x/2 + 0.001f);
-                            update_player_BB();
+                            (*entity).pos.x = (*it).BB.max.x + ((*entity).size.x/2 + 0.001f);
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
-            if (player_prev_BB.max.x < (*it).BB.min.x)  // check if player collides from -X direction
+            if ((*entity).prev_BB.max.x < (*it).BB.min.x)  // check if player collides from -X direction
             {
-                if ((player_BB.max.x > (*it).BB.min.x) && (player_BB.min.x < (*it).BB.max.x))
+                if (((*entity).BB.max.x > (*it).BB.min.x) && ((*entity).BB.min.x < (*it).BB.max.x))
                 {
-                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).prev_BB.max.y > (*it).BB.min.y) && ((*entity).prev_BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
-                            player_pos.x = (*it).BB.min.x - (player_size.x/2 + 0.001f);
-                            update_player_BB();
+                            (*entity).pos.x = (*it).BB.min.x - ((*entity).size.x/2 + 0.001f);
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
-            if (player_prev_BB.min.y > (*it).BB.max.y)  // check if player collides from +Y direction
+            if ((*entity).prev_BB.min.y > (*it).BB.max.y)  // check if player collides from +Y direction
             {
-                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x <= (*it).BB.max.x))
+                if (((*entity).prev_BB.max.x > (*it).BB.min.x) && ((*entity).prev_BB.min.x <= (*it).BB.max.x))
                 {
-                    if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).BB.max.y > (*it).BB.min.y) && ((*entity).BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
-                            player_pos.y = (*it).BB.max.y + (player_size.y/2 + 0.001f);
-                            update_player_BB();
+                            (*entity).pos.y = (*it).BB.max.y + ((*entity).size.y/2 + 0.001f);
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
-            if (player_prev_BB.max.y < (*it).BB.min.y)  // check if player collides from -Y direction
+            if ((*entity).prev_BB.max.y < (*it).BB.min.y)  // check if player collides from -Y direction
             {
-                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x))
+                if (((*entity).prev_BB.max.x > (*it).BB.min.x) && ((*entity).prev_BB.min.x < (*it).BB.max.x))
                 {
-                    if ((player_BB.max.y > (*it).BB.min.y) && (player_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).BB.max.y > (*it).BB.min.y) && ((*entity).BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_prev_BB.max.z > (*it).BB.min.z) && (player_prev_BB.min.z < (*it).BB.max.z))
+                        if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
-                            player_pos.y = (*it).BB.min.y - (player_size.y/2 + 0.001f);
-                            update_player_BB();
+                            (*entity).pos.y = (*it).BB.min.y - ((*entity).size.y/2 + 0.001f);
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
-            if (player_prev_BB.min.z > (*it).BB.max.z)  // check if player collides from +Z direction
+            if ((*entity).prev_BB.min.z > (*it).BB.max.z)  // check if player collides from +Z direction
             {
-                if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x))
+                if (((*entity).prev_BB.max.x > (*it).BB.min.x) && ((*entity).prev_BB.min.x < (*it).BB.max.x))
                 {
-                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).prev_BB.max.y > (*it).BB.min.y) && ((*entity).prev_BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z))
+                        if (((*entity).BB.max.z > (*it).BB.min.z) && ((*entity).BB.min.z < (*it).BB.max.z))
                         {
-                            player_pos.z = (*it).BB.max.z + (player_size.z/2 + 0.001f);
-                            player_grounded = true;
-                            update_player_BB();
+                            (*entity).pos.z = (*it).BB.max.z + ((*entity).size.z/2 + 0.001f);
+                            (*entity).grounded = true;
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
-            if (player_prev_BB.max.z < (*it).BB.min.z)  // check if player collides from -Z direction
+            if ((*entity).prev_BB.max.z < (*it).BB.min.z)  // check if player collides from -Z direction
             {
-                if ((player_BB.max.z > (*it).BB.min.z) && (player_BB.min.z < (*it).BB.max.z))
+                if (((*entity).BB.max.z > (*it).BB.min.z) && ((*entity).BB.min.z < (*it).BB.max.z))
                 {
-                    if ((player_prev_BB.max.y > (*it).BB.min.y) && (player_prev_BB.min.y < (*it).BB.max.y))
+                    if (((*entity).prev_BB.max.y > (*it).BB.min.y) && ((*entity).prev_BB.min.y < (*it).BB.max.y))
                     {
-                        if ((player_prev_BB.max.x > (*it).BB.min.x) && (player_prev_BB.min.x < (*it).BB.max.x)) 
+                        if (((*entity).prev_BB.max.x > (*it).BB.min.x) && ((*entity).prev_BB.min.x < (*it).BB.max.x)) 
                         {
-                            player_pos.z = (*it).BB.min.z - (player_size.z/2 + 0.001f);
-                            update_player_BB();
+                            (*entity).pos.z = (*it).BB.min.z - ((*entity).size.z/2 + 0.001f);
+                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
                             break;
                         }
                     }
                 }
             }
         }
-        else player_colliding = false;  
+        else player.colliding = false;
     }
-
 }
-/*void bullets_collisions()
-{
-    if(!bullets.empty())
-        for (auto it = bullets.begin(); it < bullets.end(); it++)
-        {
-            if (abs((*it).pos.x) > LVL_SIZE_X || abs((*it).pos.z) > LVL_SIZE_Y || abs((*it).pos.y) > LVL_SIZE_Z) bullets.erase(it);
 
-            for (auto it2 = level_models.begin(); it2 < level_models.end(); it2++)
-            {
-                if (boxCollideDetect((*it).pos, (*it).size, (*it2).pos, (*it2).size))
-                {
-                    bullets.erase(it);
-                }
-            }
-        }
-} */
-
-
-void all_collisions()
-{
-    player_collisions();
-    //bullets_collisions();
-}
 
 
 

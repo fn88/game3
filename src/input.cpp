@@ -2,6 +2,8 @@
 #include "raymath.h"
 #include "player.h"
 #include "set_up.h"
+#include "audio.h"
+
 
 // mouse
 float theta;
@@ -25,41 +27,42 @@ void update_mouse()
 
 void update_player_controls()
 {
-    if (IsMouseButtonPressed(0)) player_attack1 = true;
+    if (IsMouseButtonPressed(0)) player.attack1 = true;
+    if (IsMouseButtonPressed(1)) play_bg_music(); //PlaySoundMulti(bg_wind); 
 
     if (IsKeyDown(KEY_W))
     {
-        player_pos.x += player_speed * cos(player_theta);
-        player_pos.y += player_speed * sin(player_theta);
+        player.pos.x += player.speed * cos(player.theta);
+        player.pos.y += player.speed * sin(player.theta);
     }
     if (IsKeyDown(KEY_S))
     {
-        player_pos.x -= player_speed * cos(player_theta);
-        player_pos.y -= player_speed * sin(player_theta);
+        player.pos.x -= player.speed * cos(player.theta);
+        player.pos.y -= player.speed * sin(player.theta);
     }
     if (IsKeyDown(KEY_A))
     {
-        player_pos.x += player_speed * cos(player_theta + PI/2);
-        player_pos.y += player_speed * sin(player_theta + PI/2);
+        player.pos.x += player.speed * cos(player.theta + PI/2);
+        player.pos.y += player.speed * sin(player.theta + PI/2);
     }
     if (IsKeyDown(KEY_D))
     {
-        player_pos.x += player_speed * cos(player_theta - PI/2);
-        player_pos.y += player_speed * sin(player_theta - PI/2);
+        player.pos.x += player.speed * cos(player.theta - PI/2);
+        player.pos.y += player.speed * sin(player.theta - PI/2);
     }
 
-    if (IsKeyDown(KEY_LEFT_SHIFT)) player_speed = 2.0f;
-    else player_speed = 0.05f;
+    if (IsKeyDown(KEY_LEFT_SHIFT)) player.speed = 2.0f;
+    else player.speed = 0.25f;
 
-    if (IsKeyDown(KEY_R)) player_pos.z += 0.1f;
-    if (IsKeyDown(KEY_F)) player_pos.z -= 0.1f;
+    if (IsKeyDown(KEY_R)) player.pos.z += 0.1f;
+    if (IsKeyDown(KEY_F)) player.pos.z -= 0.1f;
 
     if (IsKeyDown(KEY_SPACE))
     {
-        if (player_grounded)
+        if (player.grounded)
         {
-            player_jumped = true;
-            player_grounded = false;
+            player.jumped = true;
+            player.grounded = false;
         }
     }
     update_player_BB();
