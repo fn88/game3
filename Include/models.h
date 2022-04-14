@@ -13,19 +13,19 @@ struct model_Obj {
 };                    
 
 extern model_Obj load_model(const char *model_loc, const char *texture_loc, Vector3 pos);
-extern model_Obj load_tree_model(const char *model_loc, const char *texture_loc, Vector3 pos);  //temp
-extern BoundingBox update_BB_pos(BoundingBox box, Vector3 pos, Vector3 size);
+extern model_Obj load_tree_model(const char *model_loc, const char *texture_loc, Vector3 pos); 
+extern model_Obj load_tobakki_model(const char *model_loc, const char *texture_loc, Vector3 pos);  //temp
+extern BoundingBox update_BB_pos(Vector3 size, Vector3 pos);
 
 extern std::vector<model_Obj> level_models;
 extern std::vector<model_Obj> * ptr_level_models;
 extern std::vector<model_Obj> tree_models;
 extern std::vector<model_Obj> * ptr_tree_models;
-extern Vector3 tree_spots[];
-
-
+extern std::vector<model_Obj> tobakki_models;
+extern std::vector<model_Obj> * ptr_tobakki_models;
 
 void load_level_models();
 void load_tree_models();
-void get_tree_spots(int n);
+void load_tobakki_models();
 void update_tree_anims();
 

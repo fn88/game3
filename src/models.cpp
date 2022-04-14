@@ -7,7 +7,7 @@
 
 std::vector<model_Obj>level_models{};
 std::vector<model_Obj>tree_models{};
-Vector3 tree_spots[] = {0};
+std::vector<model_Obj>tobakki_models{};
 
 void load_level_models()
 {
@@ -17,16 +17,6 @@ void load_level_models()
 }
 std::vector<model_Obj> * ptr_level_models = &level_models;
 
-void gen_tree_spots(int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        float x = float(GetRandomValue(-200, 200));
-        float y = float(GetRandomValue(-200, 200));
-        float z = 0.0f;
-        tree_spots[i] = Vector3({x, y, z});
-    }
-}
 
 void load_tree_models()
 {
@@ -39,13 +29,42 @@ void load_tree_models()
     }
     for (auto it = tree_models.begin(); it < tree_models.end(); it++)
     {
-        (*it).BB = update_BB_pos((*it).BB, (*it).size, {(*it).pos.x, (*it).pos.y, (*it).pos.z + (*it).size.z/2});
+        (*it).BB = update_BB_pos((*it).size, {(*it).pos.x, (*it).pos.y, (*it).pos.z + (*it).size.z/2});
         float x = float(GetRandomValue(-30, 30))/400.0f;
         float y = float(GetRandomValue(-30, 30))/400.0f;
         float z = float(GetRandomValue(-30, 30))/400.0f;
         (*it).model.transform = MatrixRotateXYZ(Vector3({x, y, z}));
     }
 }
+std::vector<model_Obj> * ptr_tree_models = &tree_models;
+
+void load_tobakki_models()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        float x = float(GetRandomValue(-100, 100));
+        float y = float(GetRandomValue(-100, 100));
+        float z = 1.0f;
+        tobakki_models.push_back(load_tobakki_model("resources/models/tobakki1.obj", "resources/textures/floor_texture.png", {x, y, z}));
+        x = float(GetRandomValue(-100, 100));
+        y = float(GetRandomValue(-100, 100));
+        z = 1.0f;
+        tobakki_models.push_back(load_tobakki_model("resources/models/tobakki2.obj", "resources/textures/floor_texture.png", {x, y, z}));
+        x = float(GetRandomValue(-100, 100));
+        y = float(GetRandomValue(-100, 100));
+        z = 1.0f;
+        tobakki_models.push_back(load_tobakki_model("resources/models/tobakki3.obj", "resources/textures/floor_texture.png", {x, y, z}));
+    }
+    for (auto it = tobakki_models.begin(); it < tobakki_models.end(); it++)
+    {
+        (*it).BB = update_BB_pos((*it).size, {(*it).pos.x, (*it).pos.y, (*it).pos.z + (*it).size.z/2});
+        float x = float(GetRandomValue(-30, 30))/400.0f;
+        float y = float(GetRandomValue(-30, 30))/400.0f;
+        float z = float(GetRandomValue(-3, 3));
+        (*it).model.transform = MatrixRotateXYZ(Vector3({x, y, z}));
+    }
+}
+std::vector<model_Obj> * ptr_tobakki_models = &tobakki_models;
 
 /*void load_tree_models()
 {
@@ -56,10 +75,9 @@ void load_tree_models()
         (*it).BB = update_BB_pos((*it).BB, (*it).size, {(*it).pos.x, (*it).pos.y, (*it).pos.z + (*it).size.z/2});
     }
 }*/
-std::vector<model_Obj> * ptr_tree_models = &tree_models;
 
 
-BoundingBox update_BB_pos(BoundingBox box, Vector3 size, Vector3 pos)
+BoundingBox update_BB_pos(Vector3 size, Vector3 pos)
 {
     BoundingBox moved_box = {Vector3({  pos.x - size.x/2, 
                                         pos.y - size.y/2, 
@@ -70,7 +88,6 @@ BoundingBox update_BB_pos(BoundingBox box, Vector3 size, Vector3 pos)
     return moved_box;
 } 
 
-
 model_Obj load_model(const char *model_loc, const char *texture_loc, Vector3 model_pos)
 {
     Model model = LoadModel(model_loc);
@@ -80,7 +97,7 @@ model_Obj load_model(const char *model_loc, const char *texture_loc, Vector3 mod
     //BoundingBox BB = {Vector3({-1.0f, -1.0f, 0.0f}), Vector3({1.0f, 1.0f, 10.0f})};
     Vector3 size = {BB.max.x - BB.min.x, BB.max.y - BB.min.y, BB.max.z - BB.min.z};
 
-    return model_Obj{model, size, model_pos, update_BB_pos(BB, size, model_pos)};
+    return model_Obj{model, size, model_pos, update_BB_pos(size, model_pos)};
 }
 
 model_Obj load_tree_model(const char *model_loc, const char *texture_loc, Vector3 model_pos)   //temp
@@ -92,7 +109,19 @@ model_Obj load_tree_model(const char *model_loc, const char *texture_loc, Vector
     BoundingBox BB = {Vector3({-1.0f, -1.0f, 0.0f}), Vector3({1.0f, 1.0f, 10.0f})};
     Vector3 size = {BB.max.x - BB.min.x, BB.max.y - BB.min.y, BB.max.z - BB.min.z};
     unsigned int rv1 = GetRandomValue(1, 120);
-    return model_Obj{model, size, model_pos, update_BB_pos(BB, size, model_pos), rv1};
+    return model_Obj{model, size, model_pos, update_BB_pos(size, model_pos), rv1};
+}
+
+model_Obj load_tobakki_model(const char *model_loc, const char *texture_loc, Vector3 model_pos)   //temp
+{
+    Model model = LoadModel(model_loc);
+    Texture2D texture = LoadTexture(texture_loc);
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    //BoundingBox BB = GetModelBoundingBox(model);
+    BoundingBox BB = {Vector3({-1.0f, -1.0f, 0.0f}), Vector3({1.0f, 1.0f, 0.2f})};
+    Vector3 size = {BB.max.x - BB.min.x, BB.max.y - BB.min.y, BB.max.z - BB.min.z};
+    unsigned int rv1 = GetRandomValue(1, 120);
+    return model_Obj{model, size, model_pos, update_BB_pos(size, model_pos), rv1};
 }
 
 

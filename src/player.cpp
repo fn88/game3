@@ -14,7 +14,7 @@ entity_Obj player{0};
 void create_player()
 {
     player.model = LoadModel("resources/models/player.obj");
-    player.size = {2.0f, 2.0f, 2.0f};
+    player.size = {2.0f, 2.0f, 4.0f};
     player.pos = {0.0f, 0.0f, 4.5f};
     player.prev_pos = player.pos;
     player.BB = GetModelBoundingBox(player.model);
@@ -54,7 +54,7 @@ void update_player_dir()
 
 void update_player_BB()
 {
-    player.BB = update_BB_pos(player.BB, player.size, player.pos);
+    player.BB = update_BB_pos(player.size, player.pos);
 }
 
 void update_player_gravity() 

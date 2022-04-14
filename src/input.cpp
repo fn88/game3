@@ -27,8 +27,11 @@ void update_mouse()
 
 void update_player_controls()
 {
-    if (IsMouseButtonPressed(0)) player.attack1 = true;
-    if (IsMouseButtonPressed(1)) play_bg_music(); //PlaySoundMulti(bg_wind); 
+    if (IsMouseButtonPressed(0)) 
+    {
+        player.attack1 = true;
+        //PlaySound(sounds[GetRandomValue(0, 3)]);
+    }  
 
     if (IsKeyDown(KEY_W))
     {
@@ -65,7 +68,20 @@ void update_player_controls()
             player.grounded = false;
         }
     }
+    if (IsKeyPressed(KEY_Q)) 
+    {
+        player.pos = {0.0, 0.0f, 15.0f};
+        player.grounded = true;
+    }
     update_player_BB();
+
+    if (IsKeyPressed(KEY_TAB))
+    {
+        if (tab_info_hidden) tab_info_hidden = false;
+        else tab_info_hidden = true;
+    }
+        
+    
 }
 
 

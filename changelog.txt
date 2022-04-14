@@ -1,0 +1,9 @@
+4/13/22
+ADDED:
+- a changelog file
+- a screenshots folder
+- 2 more variations of tobakki weeds.
+- toggle info with TAB key
+- stick swings and hits sound effects
+- stick hitbox
+

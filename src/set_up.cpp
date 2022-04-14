@@ -13,6 +13,8 @@ int LVL_SIZE_Y = 1000;
 int LVL_SIZE_Z = 1000;
 Camera cam = {0};
 
+bool tab_info_hidden = true;
+
 void set_up_window()
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT); 
@@ -20,7 +22,7 @@ void set_up_window()
     SetMousePosition(S_W/2.0f, S_H/2.0f);
     HideCursor();
     SetTargetFPS(FPS);
-    //InitAudioDevice();
+    InitAudioDevice();
 }
 
 void set_up_cam()

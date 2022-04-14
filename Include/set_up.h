@@ -10,6 +10,7 @@ extern int LVL_SIZE_Y;
 extern int LVL_SIZE_Z;
 extern Camera cam;
 extern float mouse_sensitivity;
+extern bool tab_info_hidden;
 
 extern int counter1;
 extern int counter2;

@@ -46,7 +46,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
                             (*entity).pos.x = (*it).BB.max.x + ((*entity).size.x/2 + 0.001f);
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }
@@ -61,7 +61,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
                             (*entity).pos.x = (*it).BB.min.x - ((*entity).size.x/2 + 0.001f);
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }
@@ -76,7 +76,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
                             (*entity).pos.y = (*it).BB.max.y + ((*entity).size.y/2 + 0.001f);
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }
@@ -91,7 +91,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         if (((*entity).prev_BB.max.z > (*it).BB.min.z) && ((*entity).prev_BB.min.z < (*it).BB.max.z))
                         {
                             (*entity).pos.y = (*it).BB.min.y - ((*entity).size.y/2 + 0.001f);
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }
@@ -107,7 +107,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         {
                             (*entity).pos.z = (*it).BB.max.z + ((*entity).size.z/2 + 0.001f);
                             (*entity).grounded = true;
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }
@@ -122,7 +122,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                         if (((*entity).prev_BB.max.x > (*it).BB.min.x) && ((*entity).prev_BB.min.x < (*it).BB.max.x)) 
                         {
                             (*entity).pos.z = (*it).BB.min.z - ((*entity).size.z/2 + 0.001f);
-                            (*entity).BB = update_BB_pos((*entity).BB, (*entity).size, (*entity).pos);
+                            (*entity).BB = update_BB_pos((*entity).size, (*entity).pos);
                             break;
                         }
                     }

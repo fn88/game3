@@ -18,19 +18,17 @@ int main()
     create_player();
     create_stick();
     create_enemy();
+
     load_level_models();
     load_tree_models();
+    load_tobakki_models();
 
-    InitAudioDevice();
-    Music bg_wind = LoadMusicStream("resources/audio/windogg.ogg");
-    PlayMusicStream(bg_wind);
-    //load_sounds();
-
-    //play_bg_music();
+    load_sounds();
+    play_bg_music();
 
     while (!WindowShouldClose())
     {
-        UpdateMusicStream(bg_wind);
+        update_audio();
         update_input();
         update_player();
         update_player_gear();
