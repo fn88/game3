@@ -8,7 +8,8 @@
 
 void get_bounding_box(std::vector<model_Obj> models_vector);
 
-void collisions(std::vector<model_Obj> * models, entity_Obj * entity);
+void gravity_collisions(std::vector<seed_Obj> * models, entity_Obj * entity);
+void collisions(std::vector<seed_Obj> * models, entity_Obj * entity);
 void player_collisions();
 void bullets_collisions();
 

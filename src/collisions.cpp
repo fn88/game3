@@ -7,12 +7,14 @@
 
 void player_collisions()
 {
-    collisions(ptr_tree_models, ptr_player);
-    collisions(ptr_level_models, ptr_player);
+    gravity_collisions(ptr_placed_level_models, ptr_player);
+    collisions(ptr_placed_level_models, ptr_player);
+    
+    collisions(ptr_seeded_pine_trees, ptr_player);
 }
 
 
-void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
+void gravity_collisions(std::vector<seed_Obj> * models, entity_Obj * entity)
 {
     for (auto it = (*models).begin(); it < (*models).end(); it++)
     {
@@ -31,12 +33,16 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
         }
         else (*entity).grounded = false;
     }
+}
 
+
+void collisions(std::vector<seed_Obj> * models, entity_Obj * entity)
+{
     for (auto it = (*models).begin(); it < (*models).end(); it++)
     {
         if (CheckCollisionBoxes((*entity).BB, (*it).BB))
         {
-            player.colliding = true;
+            //player.colliding = true;
             if ((*entity).prev_BB.min.x > (*it).BB.max.x)  // check if player collides from +X direction
             {
                 if (((*entity).BB.max.x > (*it).BB.min.x) && ((*entity).BB.min.x < (*it).BB.max.x))
@@ -129,7 +135,7 @@ void collisions(std::vector<model_Obj> * models, entity_Obj * entity)
                 }
             }
         }
-        else player.colliding = false;
+        //else player.colliding = false;
     }
 }
 

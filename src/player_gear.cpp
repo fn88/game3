@@ -45,15 +45,15 @@ void update_player_gear()
             stick.anim1_fc = 0;
             player.attack1 = false;
         }
-        if (stick.anim1_fc >= 10 && stick.anim1_fc <= 12) PlaySound(sounds[GetRandomValue(0, 3)]);
-        if (stick.anim1_fc >= 30 && stick.anim1_fc <= 32)
+        if (stick.anim1_fc >= 6 && stick.anim1_fc <=8) PlaySound(sounds[GetRandomValue(0, 3)]);
+        if (stick.anim1_fc >= 10 && stick.anim1_fc <= 12)
         {
             stick.hit_BB_pos = { player.pos.x + (3 * (cos(player.phi) * cos(player.theta))), 
                                  player.pos.y + (3 * (cos(player.phi) * sin(player.theta))),
                                  player.pos.z + (3 * sin(player.phi)) };
             stick.hit_BB = update_BB_pos(stick.hit_BB_size, stick.hit_BB_pos);
                             
-            for (auto it = tree_models.begin(); it < tree_models.end(); it++)
+            for (auto it = seeded_pine_trees.begin(); it < seeded_pine_trees.end(); it++)
             {
                 if (CheckCollisionBoxes((*it).BB, stick.hit_BB)) PlaySound(sounds[(GetRandomValue(4, 5))]);
             }

@@ -20,8 +20,11 @@ int main()
     create_enemy();
 
     load_level_models();
-    load_tree_models();
-    load_tobakki_models();
+
+    load_pine_tree_models();
+    seed_pine_trees(1000);
+    load_weeds_models();
+    seed_weeds(3000);
 
     load_sounds();
     play_bg_music();
@@ -34,11 +37,9 @@ int main()
         update_player_gear();
         update_enemy();
         update_projectiles();
-        update_tree_anims();
-        //all_collisions();
+        update_pine_tree_anims();
         draw_everything();
-        
-
+    
         update_counters();
         
     }

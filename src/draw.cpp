@@ -9,23 +9,23 @@
 
 void draw_level()
 {
-    for (auto it = level_models.begin(); it < level_models.end(); it++)
+    for (auto it = seeded_pine_trees.begin(); it < seeded_pine_trees.end(); it++)
     {
-        DrawModel((*it).model, (*it).pos, 1.0f, (Color){0, 100, 0, 255});
+        DrawModel(pine_tree_models[(*it).model_variant].model, (*it).pos, 1.0f, BROWN);
         //DrawBoundingBox((*it).BB, GREEN);
     }
-
-    for (auto it = tree_models.begin(); it < tree_models.end(); it++)
+    for (auto it = seeded_weeds.begin(); it < seeded_weeds.end(); it++)
     {
-        DrawModel((*it).model, (*it).pos, 1.0f, BROWN);
-        //DrawBoundingBox((*it).BB, GREEN);
+        DrawModel(weeds_models[(*it).model_variant].model, (*it).pos, 1.0f, GREEN);
+        //DrawBoundingBox((*it).BB, RED);
     }
-    for (auto it = tobakki_models.begin(); it < tobakki_models.end(); it++)
+    for (int i = 0; i < 2; i++)
     {
-        DrawModel((*it).model, (*it).pos, 1.0f, (Color){100, 130, 0, 255});
-        //DrawBoundingBox((*it).BB, GREEN);
+        DrawModel(level_models.at(i).model, placed_level_models.at(i).pos, 1.0f, WHITE);
+        //DrawBoundingBox(placed_level_models.at(i).BB, RED);
     }
 }
+
 
 void draw_player()
 {
